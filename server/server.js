@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
+const uniqid = require('uniqid');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,12 +31,29 @@ const initialLocations = [
 app.locals.idIndex = 3;
 app.locals.locations = initialLocations;
 
-app.get('/locations', (req, res) => res.send({ locations: app.locals.locations }));
+app.get('/locations', (req, res) =>
+  res.send({ locations: app.locals.locations })
+);
 
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+});
+
+app.post('/locations', async (request, response) => {
+  const newLocation = { id: uniqid(), ...request.body };
+
+  for (let requiredParameter of ['id', 'name', 'lat', 'lng']) {
+    if (!newLocation[requiredParameter])
+      return response.status(422).json({
+        message: `You are missing a required parameter of ${requiredParameter}`,
+      });
+  }
+
+  initialLocations.push(newLocation);
+
+  response.status(201).json(newLocation);
 });
 
 const portNumber = process.env.PORT || 3001;
