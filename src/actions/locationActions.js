@@ -5,12 +5,12 @@ const storeAllLocations = (locations) => ({
     data: locations.locations,
 });
 
-const addLocation = (location) => ({
+export const addLocation = (location) => ({
   type: 'SAVE_LOCATION',
   data: location,
 });
 
-const fetchAllLocations = () => {
+export const fetchAllLocations = () => {
   return (dispatch) => {
     return fetch('/locations', {
       headers: {
@@ -23,4 +23,3 @@ const fetchAllLocations = () => {
   };
 };
 
-export default fetchAllLocations;
