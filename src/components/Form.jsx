@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
+import uniqid from 'uniqid';
+
+const initialState = {
+  name: '',
+  lat: '',
+  lng: '',
+  nameErr: '',
+  latErr: '',
+  lngErr: '',
+};
 
 class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isEnabled: false,
-      name: '',
-      lat: '',
-      lng: '',
-      nameErr: '',
-      latErr: '',
-      lngErr: '',
+      ...initialState,
     };
   }
 
@@ -19,19 +23,22 @@ class Form extends Component {
 
     const { name, lat, lng } = this.state;
 
-    this.props.saveLocation({ name, lat, lng });
+    this.props.saveLocation({
+      id: uniqid(),
+      name,
+      lat: parseFloat(lat),
+      lng: parseFloat(lng),
+    });
+
+    this.setState({ ...initialState });
   }
 
   isInvalidLonLat(value) {
-    return !/^(-?|\+?)?\d+(\.\d+)?$/.test(value);
+    return !/^(-?|\+?)?\d+(\.\d+)?$/.test(`${value}`);
   }
 
-  validate() {
-    const { name, lat, lng } = this.state;
-    this.setState({
-      isEnabled:
-        !!name && !this.isInvalidLonLat(lng) && !this.isInvalidLonLat(lat),
-    });
+  inRange(value, min, max) {
+    return value >= min && value <= max;
   }
 
   handleInputBlur(e, state, msg, condition) {
@@ -39,29 +46,35 @@ class Form extends Component {
       this.setState({
         [state]: 'This field is required it cannot be left blank',
       });
-    } else if  (condition) {
+    } else if (condition) {
       this.setState({
         [state]: msg,
       });
     } else {
       this.setState({ [state]: '' });
     }
-    this.validate();
   }
 
   handleInputChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    this.validate();
   }
 
   handleLatLangBlur(e, state, field) {
-    const msg = `This not a valid ${field}`;
+    let msg;
+    if (field) {
+    }
     this.handleInputBlur(e, state, msg, this.isInvalidLonLat(e.target.value));
   }
 
   render() {
+    const { name, lat, lng } = this.state;
+    const validLng =
+      !this.isInvalidLonLat(lng) && this.inRange(parseFloat(lng), -280, 100);
+    const validLat =
+      !this.isInvalidLonLat(lat) && this.inRange(parseFloat(lat), -85, 85);
+
     return (
       <form className="form">
         <section>
@@ -106,7 +119,7 @@ class Form extends Component {
           </label>
         </section>
         <button
-          disabled={!this.state.isEnabled}
+          disabled={!(!!name && validLng && validLat)}
           type="submit"
           onClick={(e) => this.submitForm(e)}
         >
