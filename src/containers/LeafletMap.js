@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, ZoomControl } from 'react-leaflet';
 import AllMarkers from './AllMarkers';
+import PolygonShading from './PolygonShading';
 
 class LeafletMap extends Component {
   constructor(props) {
@@ -36,6 +37,7 @@ class LeafletMap extends Component {
             minZoom={2}
           />
           <ZoomControl position="bottomright" />
+          <PolygonShading /> 
           <AllMarkers setCenter={this.setCenter} />
         </Map>
       </div>
