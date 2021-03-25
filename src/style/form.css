@@ -1,0 +1,36 @@
+label {
+  display: block;
+  text-align: left;
+  width: 80%;
+  position: relative;
+  margin: 1em 0;
+}
+
+input {
+  padding: 5px;
+  width: 100%;
+}
+
+.form {
+  width: 28%;
+  position: fixed;
+  overflow-y: auto;
+  z-index: 999;
+  height: 100%;
+  padding-top: 65px;
+  background-color: rgba(175, 175, 175, 0.5);
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  align-items: center;
+}
+
+.inputError {
+  color: red;
+  font-size: .75em;
+  position: absolute;
+  right: 0;
+}

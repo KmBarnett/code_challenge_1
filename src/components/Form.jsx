@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import uniqid from 'uniqid';
+import '../style/form.css';
 
 const initialState = {
   name: '',
@@ -41,31 +42,54 @@ class Form extends Component {
     return value >= min && value <= max;
   }
 
-  handleInputBlur(e, state, msg, condition) {
+  handleErrors(e, errField, msg, condition) {
     if (!e.target.value) {
       this.setState({
-        [state]: 'This field is required it cannot be left blank',
+        [errField]: 'This field is required it cannot be left blank',
       });
     } else if (condition) {
       this.setState({
-        [state]: msg,
+        [errField]: msg,
       });
     } else {
-      this.setState({ [state]: '' });
+      this.setState({ [errField]: '' });
     }
   }
 
-  handleInputChange(e) {
+  handleInputChange(e, errField, latOrLng) {
     this.setState({
       [e.target.name]: e.target.value,
     });
+
+    if (e.target.name === 'lat' || e.target.name === 'lng') {
+      this.handleLatLangErrors(e, errField, latOrLng);
+    } else {
+      this.handleErrors(e, errField);
+    }
   }
 
-  handleLatLangBlur(e, state, field) {
+  handleLatLangErrors(e, errField, field) {
     let msg;
     if (field) {
     }
-    this.handleInputBlur(e, state, msg, this.isInvalidLonLat(e.target.value));
+    if (this.isInvalidLonLat(e.target.value)) {
+      msg = `This is an invalid ${field}`;
+      this.handleErrors(e, errField, msg, true);
+    } else if (
+      !this.inRange(parseFloat(e.target.value), -85, 85) &&
+      field === 'Latitude'
+    ) {
+      msg = 'This Latitude is out of range (-85, 85)';
+      this.handleErrors(e, errField, msg, true);
+    } else if (
+      !this.inRange(parseFloat(e.target.value), -280, 100) &&
+      field === 'Longitude'
+    ) {
+      msg = 'This Longitude is out of range (-280, 100)';
+      this.handleErrors(e, errField, msg, true);
+    } else {
+      this.handleErrors(e, errField);
+    }
   }
 
   render() {
@@ -77,54 +101,52 @@ class Form extends Component {
 
     return (
       <form className="form">
-        <section>
-          <p>{this.state.nameErr}</p>
+        <section className="formContainer">
           <label>
             Name*
+            <span className="inputError">{this.state.nameErr}</span>
             <input
-              onChange={(e) => this.handleInputChange(e)}
+              onChange={(e) => this.handleInputChange(e, 'nameErr')}
               value={this.state.name}
               type="text"
               name="name"
-              onBlur={(e) => {
-                this.handleInputBlur(e, 'nameErr');
-              }}
             />
           </label>
         </section>
-        <section>
-          <p>{this.state.latErr}</p>
+        <section className="formContainer">
           <label>
             Lat*
+            <span className="inputError">{this.state.latErr}</span>
             <input
-              onChange={(e) => this.handleInputChange(e)}
+              onChange={(e) => this.handleInputChange(e, 'latErr', 'Latitude')}
               value={this.state.lat}
               type="text"
               name="lat"
-              onBlur={(e) => this.handleLatLangBlur(e, 'latErr', 'Latitude')}
             />
           </label>
         </section>
-        <section>
-          <p>{this.state.lngErr}</p>
+        <section className="formContainer">
           <label>
             Lon*
+            <span className="inputError">{this.state.lngErr}</span>
             <input
-              onChange={(e) => this.handleInputChange(e)}
+              onChange={(e) => this.handleInputChange(e, 'lngErr', 'Longitude')}
               value={this.state.lng}
               type="text"
               name="lng"
-              onBlur={(e) => this.handleLatLangBlur(e, 'lngErr', 'Longitude')}
             />
           </label>
         </section>
-        <button
-          disabled={!(!!name && validLng && validLat)}
-          type="submit"
-          onClick={(e) => this.submitForm(e)}
-        >
-          Save
-        </button>
+        <section className="formContainer">
+          <button
+            disabled={!(!!name && validLng && validLat)}
+            type="submit"
+            className="submitButton"
+            onClick={(e) => this.submitForm(e)}
+          >
+            Save
+          </button>
+        </section>
       </form>
     );
   }
