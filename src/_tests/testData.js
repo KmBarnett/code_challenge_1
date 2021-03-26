@@ -19,3 +19,4 @@ export const testLocations = [
   },
 ];
 
+export const testPoints = [{ id: 2, location: [42.364506, -71.038887] }];

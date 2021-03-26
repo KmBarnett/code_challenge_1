@@ -1,8 +1,8 @@
-require('isomorphic-fetch');
+import { getAllLocations } from '../apiCalls';
 
 export const storeAllLocations = (locations) => ({
-    type: 'STORE_LOCATIONS',
-    data: locations.locations,
+  type: 'STORE_LOCATIONS',
+  data: locations.locations,
 });
 
 export const addLocation = (location) => ({
@@ -12,14 +12,6 @@ export const addLocation = (location) => ({
 
 export const fetchAllLocations = () => {
   return (dispatch) => {
-    return fetch('/locations', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then((locations) => locations.json())
-      .then((json) => dispatch(storeAllLocations(json)));
+    return getAllLocations().then((json) => dispatch(storeAllLocations(json)));
   };
 };
-
