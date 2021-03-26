@@ -15,7 +15,7 @@ class AllMarkers extends PureComponent {
   render() {
     const { locations, setCenter, selectedPoints } = this.props;
     const markerArray = locations.map((marker, i) => {
-      const size = !!selectedPoints.find(point => point.id === i) ? [20,20] : [15,15];
+      const size = !!selectedPoints.find(point => point.id === i) ? [25,25] : [15,15];
       return (
         <MapMarker
           key={i}
