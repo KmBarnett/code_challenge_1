@@ -13,12 +13,14 @@ class AllMarkers extends PureComponent {
     } 
   };
   render() {
-    const { locations, setCenter } = this.props;
+    const { locations, setCenter, selectedPoints } = this.props;
     const markerArray = locations.map((marker, i) => {
+      const size = !!selectedPoints.find(point => point.id === i) ? [20,20] : [15,15];
       return (
         <MapMarker
           key={i}
           id={i}
+          size={size}
           location={[+marker.lat, +marker.lng]}
           name={marker.name}
           onClick={this.togglePoint}

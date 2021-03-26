@@ -7,7 +7,7 @@ class MapMarker extends PureComponent {
   render() {
     const icon = L.icon({
       iconUrl: tealdot,
-      iconSize: [15, 15],
+      iconSize: this.props.size,
     });
 
     return (
