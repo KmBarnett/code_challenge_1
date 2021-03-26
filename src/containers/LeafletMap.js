@@ -6,9 +6,7 @@ import PolygonShading from './PolygonShading';
 class LeafletMap extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    };
+    this.state = {};
   }
 
   setCenter = (newCenter) => {
@@ -17,18 +15,45 @@ class LeafletMap extends Component {
     }
   };
 
+  keyNavigation(e) {
+    const { center } = this.state;
+    console.log(center);
+    switch (e.keyCode) {
+      case 37: // left
+        if (center[1] - 5 > -280) {
+          this.setState({ center: [center[0], center[1] - 5] });
+        }
+        break;
+      case 39: // right:
+        if (center[1] + 5 < 100) {
+          this.setState({ center: [center[0], center[1] + 5] });
+        }
+        break;
+      case 38: // up:
+        if (center[0] + 5 < 85) {
+          this.setState({ center: [center[0] + 5, center[1]] });
+        }
+        break;
+      case 40: // down:
+        if (center[0] - 5 > -85) {
+          this.setState({ center: [center[0] - 5, center[1]] });
+        }
+        break;
+
+      default:
+        break;
+    }
+  }
+
   render() {
     return (
-      <div className="map-container">
+      <div onKeyDown={(e) => this.keyNavigation(e)} className="map-container">
         <Map
           className="map"
           zoomControl={false}
           center={this.state.center}
           zoom={4}
-          maxBounds={[
-            [85, 100],
-            [-85, -280],
-          ]}
+          maxBounds={[[85, 100], [-85, -280]]}
         >
           <TileLayer
             url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -37,7 +62,7 @@ class LeafletMap extends Component {
             minZoom={2}
           />
           <ZoomControl position="bottomright" />
-          <PolygonShading /> 
+          <PolygonShading />
           <AllMarkers setCenter={this.setCenter} />
         </Map>
       </div>
