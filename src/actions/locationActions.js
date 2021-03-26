@@ -1,6 +1,6 @@
 require('isomorphic-fetch');
 
-const storeAllLocations = (locations) => ({
+export const storeAllLocations = (locations) => ({
     type: 'STORE_LOCATIONS',
     data: locations.locations,
 });

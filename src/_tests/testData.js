@@ -1,4 +1,4 @@
-const testLocations = [
+export const testLocations = [
   {
     id: 'id1',
     name: 'Denver',
@@ -19,4 +19,3 @@ const testLocations = [
   },
 ];
 
-export default testLocations;
