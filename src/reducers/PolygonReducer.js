@@ -3,7 +3,6 @@ const initialState = {
 };
 
 const Polygons = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case 'SELECT_POINT':
       return Object.assign({}, state, {

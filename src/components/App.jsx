@@ -9,6 +9,7 @@ class App extends Component {
   getLocations() {
     this.props.fetchAllLocations();
   }
+
   render() {
     return (
       <div className="App">

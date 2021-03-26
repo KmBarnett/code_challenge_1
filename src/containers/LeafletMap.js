@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Map, TileLayer, ZoomControl } from 'react-leaflet';
 import AllMarkers from './AllMarkers';
 import PolygonShading from './PolygonShading';
+import { CoordinatesControl } from 'react-leaflet-coordinates';
 
 class LeafletMap extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class LeafletMap extends Component {
 
   keyNavigation(e) {
     const { center } = this.state;
-    console.log(center);
+
     switch (e.keyCode) {
       case 37: // left
         if (center[1] - 5 > -280) {
@@ -64,6 +65,10 @@ class LeafletMap extends Component {
           <ZoomControl position="bottomright" />
           <PolygonShading />
           <AllMarkers setCenter={this.setCenter} />
+          <CoordinatesControl
+            position="topleft"
+            style={{ fontSize: '1.5em' }}
+          />
         </Map>
       </div>
     );
