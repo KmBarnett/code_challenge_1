@@ -1,4 +1,4 @@
-import { getAllLocations } from '../apiCalls';
+import { getAllLocations, postNewLocation } from '../apiCalls';
 
 export const storeAllLocations = (locations) => ({
   type: 'STORE_LOCATIONS',
@@ -13,5 +13,13 @@ export const addLocation = (location) => ({
 export const fetchAllLocations = () => {
   return (dispatch) => {
     return getAllLocations().then((json) => dispatch(storeAllLocations(json)));
+  };
+}
+
+export const postLocation = (location) => {
+  return (dispatch) => {
+    return postNewLocation(location).then((json) =>
+      dispatch(addLocation(json))
+    );
   };
 };

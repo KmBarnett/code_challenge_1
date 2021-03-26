@@ -24,7 +24,7 @@ class Form extends Component {
 
     const { name, lat, lng } = this.state;
 
-    this.props.saveLocation({
+    this.props.postLocation({
       id: uniqid(),
       name,
       lat: parseFloat(lat),

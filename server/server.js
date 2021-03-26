@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
-const uniqid = require('uniqid');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,7 +41,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/locations', async (request, response) => {
-  const newLocation = { id: uniqid(), ...request.body };
+  const newLocation = { ...request.body };
 
   for (let requiredParameter of ['id', 'name', 'lat', 'lng']) {
     if (!newLocation[requiredParameter])
